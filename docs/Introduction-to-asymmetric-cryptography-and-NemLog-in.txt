@@ -129,7 +129,7 @@
      message produces a vastly different SHA hash value and because
      the SHA hash is a one-way function.
 
-**** Certification Revocation List
+**** Certificate Revocation List
 
      - Three-way TCP handshake required to connect to CRL server
      - Connection tracking table of network equipment at service side often
