@@ -7,6 +7,15 @@ techniques, and technologies, its documentation assumes knowledge
 about those. Without this knowledge, reading the NemLog-in
 documentation and debugging issues can be tricky.
 
+Here's a screenshot of navigating to
+https://oiosaml-net.dk:20002/RequiresAuthentication within the demo
+application and logging in using a test user. The screenshot lists all
+SAML assertions returned by the identity provider:
+
+![Home](docs/Home.png)
+
+![Requires authentication](docs/RequiresAuthentication.png)
+
 Running this solution, it's assumed that the [.NET SAML2 Service
 Provider
 Framework](https://svn.softwareborsen.dk/oiosaml.net/trunk/Net%20SAML2%20Service%20Provider%20Framework.docx)
@@ -303,5 +312,5 @@ Framework](https://svn.softwareborsen.dk/oiosaml.net/trunk/Net%20SAML2%20Service
 
 ## Contact
 
-Drop me a line if you require assistance with integrating NemLog-in in
-your application.
+Drop me a line at mail@bugfree.dk if you require assistance with
+integrating NemLog-in in your application.
