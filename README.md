@@ -85,9 +85,9 @@ Section 6.1.
      certificate revocation list server. Otherwise, login with the IdP
      will succeed but once the result is posted back to the service
      provider, the certificate used to sign the IdP response cannot be
-     verified, causing a exception. Testing from a non-whitelisted IP,
-     we disable verifying certification chain trust. We can do so by
-     editing Web.config:
+     verified, causing an exception. Testing from a non-whitelisted
+     IP, we disable verifying certification chain trust. We can do so
+     by editing Web.config:
 
      ```
      <IDPEndPoints metadata="IdP-metadata">
@@ -128,10 +128,10 @@ Section 6.1.
 
 ## Develop locally by dependency-injecting NemLogin into controllers
 
-During development of a service provider, continously logging into
-NemLog-in is a hazzle. Instead, use the local identity provider or
+During development of a service provider, continuously logging into
+NemLog-in is a hassle. Instead, use the local identity provider or
 dependency-inject an object encapsulating the SamlIdentity into the
-controller. This way, any property otherwise returned by NemLogin can
+controller. This way, any property otherwise returned by NemLog-in can
 be changed in seconds.
 
 ## Updating the metadata file for a new service provider
@@ -146,7 +146,7 @@ Metadata is updated by making changes to the XML file directly
 file must be uploaded to the (NemLog-in administration
 portal)[https://administration.nemlog-in.dk]. Everyone with an
 employee NemID can be granted access to modifying the configuration of
-a NemLogin application within the portal by a company administrator. 
+a NemLog-in application within the portal by a company administrator. 
 
   1. Inside the EntityDescriptor element, update the entityID
      attribute to match a new environment. While the string looks like
@@ -158,11 +158,11 @@ a NemLogin application within the portal by a company administrator.
 
   2. Update the two SingleLogoutService elements by changing the
      Location and ResponseLocation attribute to match the base URL of
-     the sevice. Then append logout.ashx, e.g.,
+     the service. Then append logout.ashx, e.g.,
      https://myservice/logout.ashx.
 
   3. Update the AssertionConsumerService element's Location attribute
-     to match the base URL of your sevice. Then append login.ashx,
+     to match the base URL of your service. Then append login.ashx,
      e.g., https://myservice/login.ashx.
 
   4. Inside the two X509Certificate elements, paste in the public key
@@ -185,18 +185,18 @@ match up with the service's metadata:
 
   2. The inner text of the Audience element must match what's present
      in the service's metadata, i.e., the entityId value. This value
-     is sent to IdP and is how the identity provider identifies the
-     service provider calling it.
+     is sent to the IdP and is how the identity provider identifies
+     the service provider calling it.
 
 ## Debugging on server without Visual Studio
 
 In a production environment with no Visual Studio, zero footprint
-tools such as (dnspy)[https://github.com/0xd4d/dnSpy] or
-(WinDbg)[https://developer.microsoft.com/en-us/windows/hardware/download-windbg]
-can be used for tracing code executing. dnspy disasembles IL to C# and
-supports setting breaking and inspecting the value of variables in C#
-code without access to the original sources. WinDbg on the other hand
-works solely at the IL level. Using these tools, it's possible to
+tools such as [dnspy](https://github.com/0xd4d/dnSpy) or
+[WinDbg](https://developer.microsoft.com/en-us/windows/hardware/download-windbg)
+can be used for tracing code executing. dnspy disassembles IL to C#
+and supports setting breaking and inspecting the value of variables in
+C# code without access to the original sources. WinDbg on the other
+hand works solely at the IL level. Using these tools, it's possible to
 follow execution through the service provider's own code as well as
 that of the oiosaml.net component.
 
@@ -284,12 +284,13 @@ work:
 
 ### Page shows "Saml20Indentity not initialized" error message
 
-The application has lost track that the user is logged in. If
-we logout by navigating to https://oiosaml-net.dk:20002/logout.ashx
-and then back a page requirering authentication, we're directed
-to the NemLogIn IdP which usually sees us as logged in and redirects us
-back to the original page without the need for explicitly logging
-in again. I'm not sure whether this is a bug or a feature.
+The application has lost track that the user is logged in. If we
+logout by navigating to https://oiosaml-net.dk:20002/logout.ashx and
+then go back to a page which requires authentication, oiosaml.net
+redirects the browser to the NemLog-in IdP which might see us as
+logged in, redirecting the browser back to the original page without
+the need for explicitly logging in again (it's unclear if this error
+message is a feature or a bug).
 
 ## References
 
