@@ -1,0 +1,41 @@
+﻿@model Bugfree.NemLogIn.Web.Controllers.AssertionModel
+<h2>Requires Authentication -> Index</h2>
+
+<table>
+    <tr>
+        <th>Key</th>
+        <th>Value</th>
+    </tr>
+    @foreach (var assertion in Model.Assertions)
+    {
+        <tr>
+            <td>@assertion.Key</td>
+            <td>@assertion.Value</td>
+        </tr>
+    }
+</table>
+
+<br />
+<div>
+
+    @using(Html.BeginForm("Logoff", "RequiresAuthentication"))
+    {
+        <input type="submit" value="Logoff" />
+    }
+
+    @using (Html.BeginForm("Relogin", "RequiresAuthentication"))
+    {
+        <input type="submit" value="Relogin" />
+    }
+
+    @using (Html.BeginForm("ReloginPassive", "RequiresAuthentication"))
+    {
+        <input type="submit" value="ReloginPassive" />
+    }
+
+    @using (Html.BeginForm("ReloginNoForceAuthn", "RequiresAuthentication"))
+    {
+        <input type="submit" value="ReloginNoForceAuthn" />
+    }
+
+</div>
