@@ -1,18 +1,20 @@
 # Bugfree.NemLogIn
 
-This repository consists of an ASP.NET MVC application based on the
-oiosaml.net ASP.NET one and a [few notes on asymmetric cryptography
-and NemLog-in](). Because NemLog-in utilizes well-known principals,
-techniques, and technologies, its documentation assumes knowledge
-about those. Without this knowledge, reading the NemLog-in
-documentation and debugging issues can be tricky.
+This repository consists of an ASP.NET MVC demo application based on
+the oiosaml.net ASP.NET one and [notes on asymmetric cryptography and
+NemLog-in](docs/Introduction-to-asymmetric-cryptography-and-NemLog-in.txt).
 
-Here's a screenshot of navigating to
-https://oiosaml-net.dk:20002/RequiresAuthentication within the demo
-application and logging in using a test user. The screenshot lists all
-SAML assertions returned by the identity provider:
+Here's a screenshot of navigating to MVC application's
+https://oiosaml-net.dk:20002/Home. It shows a page which may be
+accessed by unauthentication users:
 
 ![Home](docs/Home.png)
+
+Following the "Goto page requirering authentication" link on the page,
+oiosaml.net kicks in and redirects the user to the NemLog-in identity
+provider. After providing login information, the resulting
+https://oiosaml-net.dk:20002/RequiresAuthentication page lists all
+SAML assertions returned by the identity provider:
 
 ![Requires authentication](docs/RequiresAuthentication.png)
 
