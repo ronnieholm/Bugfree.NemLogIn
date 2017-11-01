@@ -1,7 +1,8 @@
 # Bugfree.NemLogIn
 
 This repository consists of an ASP.NET MVC demo application based on
-the oiosaml.net ASP.NET one and [notes on asymmetric cryptography and
+the oiosaml.net client authentication library's ASP.NET one and [notes
+on asymmetric cryptography and
 NemLog-in](docs/Introduction-to-asymmetric-cryptography-and-NemLog-in.txt).
 
 Here's a screenshot of navigating to MVC application's
