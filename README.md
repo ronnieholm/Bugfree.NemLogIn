@@ -78,7 +78,7 @@ Section 6.1.
 
   1. Copy the IdP-metadata files from
      oiosaml.net\src\dk.nita.saml20\WebsiteDemo\idp-metadata into
-     \src\Bugfree.NemLog-in.Web\IdP-metadata.
+     \src\Bugfree.NemLogIn.Web\IdP-metadata.
 
   2. To test against the NemLog-in test IdP, the IP at which the
      service provider is run must be whitelisted with Nets'
@@ -126,7 +126,7 @@ Section 6.1.
    for IISExpress to respond to any address on port 20002 and not just
    https://localhost:20002.
 
-## Develop locally by dependency-injecting NemLogin into controllers
+## Develop locally by dependency-injecting NemLog-in into controllers
 
 During development of a service provider, continuously logging into
 NemLog-in is a hassle. Instead, use the local identity provider or
