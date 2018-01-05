@@ -1,7 +1,7 @@
 *** Introduction to asymmetric cryprography and NemLog-in
 **** Overview
 
-     - Main problem solved by using cryptography (encryption/signing)
+     - Main problem solved by using cryptography for encryption/signing
        - Facilitates bidirectional exchange of messages (XML documents)
          over an unsecure medium (the Internet) and through unsecure
          intermediaries (web browsers).
@@ -14,8 +14,8 @@
 
      - Other well-known identity providers
        - Office 365, Facebook, Google
-       - Kerberos authentication (part of Windows AD)
-         - klist Windows command
+       - Kerberos authentication (part of Windows Active Directory)
+         - Try klist Windows command
 
      - Cryptographic system using pairs of keys
        - Public key to be distributed freely
@@ -29,11 +29,11 @@
        - Public key is used to verify that a holder of the paired
          private key sent the message.
        - Combine a message with a computation using the private key to
-         create a short digital signature on the message.
+         create a short digital signature of the message.
        - Message is signed with the sender's private key and can be
          verified by anyone who has access to the sender's public key.
          Otherwise, message could've come from anyone with access to
-         the public key.
+         the public encryption key.
 
 **** Request / response SAML example
 
@@ -50,7 +50,7 @@
          </Issuer>
        </q1:AuthnRequest>
 
-     - Example response (part of large XML document)
+     - Example response (part of larger XML document)
 
        <AttributeStatement xmlns="urn:oasis:names:tc:SAML:2.0:assertion">
          <Attribute Name="urn:oid:2.5.4.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
@@ -70,17 +70,18 @@
         K_sender_sig_pub      K_receiver_sig_pub
         K_sender_sig_pri      K_receiver_sig_pri
 
-       No technical difference between enc and sig certificates --
-       it's a designation of usage. In principle, certificates may
-       be switched or the same certificate may be used for both
-       encryption and signing.
+       There's no technical difference between enc and sig
+       certificates -- it's about designation of usage. In principle,
+       certificates may be switched or the same certificate may be
+       used for both encryption and signing.
 
        Pub/pri pair grouped in a certificate (file, container).
        Certificate is oftentimes password protected if it contains
        a private key.
 
        Certificate may itself be signed with another certificate to
-       construct a chain of trust up to a root authority.
+       construct a chain of trust up to a root authority, possibly
+       with intermediaries.
        
      - Above encrypting/signing happens within the TCP/IP application
        layer.
@@ -91,14 +92,15 @@
         K_server_tls_pub    K_client_tls_pub
         K_server_tls_pri    K_client_tls_pri
 
-       With TLS, payload isn't actually encrypted/decrypted using
-       asymetric cryptography. Only the initial exchange of the session
-       key is. After initial exchange, symmetric encryption is used
-       for speed.
+       Client usually don't have it's own certificate so it cannot
+       prove its identity to the server.
 
-       Symmetric encryption uses a single secret key, which must be
-       shared and kept private by both the sender (for encryption) and
-       the receiver (for decryption).
+       With TLS, payload isn't actually encrypted/decrypted using
+       asymetric cryptography. Only the initial exchange of the
+       session key is. During initial TLS setup, Diffie-Hellman key
+       exchange is often used to generate and exchange a symmetric key
+       used to encrypt/decrypt remaining trafic (symmetric encryption
+       provides better performance).
 
 **** Algorithm for A -> B transmission 
 
@@ -120,14 +122,27 @@
      4. Compare (2) with with (3)
      5. Application-level processing of XML document
    
-     Any one with access to the public key could've sent a massage. By
-     verifying the signature, we know that the message was sent by
-     someone who holds A's private key which, hopefully, is A only.
+     Any one with access to the public key could've sent the
+     massage. By verifying the signature, we know that the message was
+     sent by someone who holds A's private key which, hopefully, is A
+     only.
 
      Each message includes both an unique ID and a timestamp, making
      replay attacks hard as a single character change to clear text
      message produces a vastly different SHA hash value and because
      the SHA hash is a one-way function.
+
+     Example: suppose roundToTen is our hash function. Then a number
+     of inputs would yield the same hash value.
+
+     Input = 5 gives output = 10
+     Input = 4 gives output = 10
+     Input = 3 gives output = 10
+     ...
+
+     Given the hash, we can't figure out what the original value was.
+     Multiple value can lead to the same hash. Yet, verifying the hash
+     of some input is a fast operation.
 
 **** Certificate Revocation List
 
@@ -150,19 +165,20 @@
        - K_SP_sig_pub
      
      Example: extract base 64 encoded part of metadata and save as
-     .cer file to inspect certificate (using associated file handler
-     or certutil command).
+     .cer file to open certificate using associated file handler,
+     certutil command, or OpenSSL package.
 
-     Metadata isn't secret (it's public keys + service
-     description). Metadata is downloaded by calling into the
+     Metadata isn't secret. It's public keys + service
+     description. Metadata is downloaded by calling into the
      metadata.ashx handler, part of oiosaml.net.
 
      Strictly speaking, metadata.ashx endpoint isn't required for the
-     service to operate but useful for debugging.
+     service to operate but useful for debugging. Other services in
+     production tends to expose the endpoint.
 
-     Private keys are stored in the Windows certificate store on IdP
-     and SP servers and must be made accessible to the IIS app pool
-     user.
+     Private keys are stored in the Windows certificate store on SP
+     server and must be made accessible to the IIS app pool
+     user. Otherwise that account cannot access the private key.
 
      HTTPS = SSL = TLS certificates are stored in certificate store as
      well.
