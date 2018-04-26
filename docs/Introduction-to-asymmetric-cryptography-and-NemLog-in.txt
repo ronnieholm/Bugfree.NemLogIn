@@ -38,7 +38,10 @@
 **** Request / response SAML example
 
      - Example request
-
+       - By breakpointing in dk.nita.saml20.protocol.Saml20SignonHandler.TransferClient(...)
+       - The request argument holds the the XML below and method hashes its content
+         and also writes the XML below to the log file.  
+       
        <?xml version="1.0"?>
        <q1:AuthnRequest ID="idea1e6977f4b541e0b52a04ae1d8a95b9" Version="2.0" IssueInstant="2017-10-27T06:55:09.0009Z" Destination="https://login.test-nemlog-in.dk/adfs/ls/" ForceAuthn="false" IsPassive="false" xmlns:q1="urn:oasis:names:tc:SAML:2.0:protocol">
          <Issuer xmlns="urn:oasis:names:tc:SAML:2.0:assertion">https://saml.oiosaml-net.dk</Issuer>
@@ -51,6 +54,9 @@
        </q1:AuthnRequest>
 
      - Example response (part of larger XML document)
+       - By breakpointing in dk.nita.saml20.protocol.Saml20SignonHandler.HandleAssertion(...)
+       - The elem argument's Outer property holds the XML below and also writes the XML 
+         below to the log file.
 
        <AttributeStatement xmlns="urn:oasis:names:tc:SAML:2.0:assertion">
          <Attribute Name="urn:oid:2.5.4.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">

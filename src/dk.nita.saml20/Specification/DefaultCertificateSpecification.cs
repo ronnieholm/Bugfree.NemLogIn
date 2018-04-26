@@ -4,7 +4,6 @@ using System.IdentityModel.Selectors;
 using System.Security.Cryptography.X509Certificates;
 using dk.nita.saml20.Properties;
 using Trace=dk.nita.saml20.Utils.Trace;
-using System.Configuration;
 
 namespace dk.nita.saml20.Specification
 {
@@ -32,12 +31,7 @@ namespace dk.nita.saml20.Specification
 
             try
             {
-                var validateCertificate = Boolean.Parse(ConfigurationManager.AppSettings["Bugfree.NemLogin.Web.ValidateCertificate"]);
-                if (validateCertificate)
-                {
-                    defaultCertificateValidator.Validate(certificate);
-                }
-
+                defaultCertificateValidator.Validate(certificate);
                 failureReason = null;
                 return true;
             }catch(Exception e)

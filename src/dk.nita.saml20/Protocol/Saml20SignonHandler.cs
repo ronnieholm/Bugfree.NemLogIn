@@ -17,6 +17,7 @@ using dk.nita.saml20.Profiles.DKSaml20.Attributes;
 using dk.nita.saml20.Session;
 using dk.nita.saml20.session;
 using dk.nita.saml20.config;
+using dk.nita.saml20.Identity;
 using dk.nita.saml20.Logging;
 using dk.nita.saml20.Properties;
 using dk.nita.saml20.protocol.pages;
@@ -126,7 +127,7 @@ namespace dk.nita.saml20.protocol
             HttpArtifactBindingParser parser = new HttpArtifactBindingParser(inputStream);
             HttpArtifactBindingBuilder builder = new HttpArtifactBindingBuilder(context);
 
-            if(parser.IsArtifactResolve())
+            if (parser.IsArtifactResolve())
             {
                 Trace.TraceData(TraceEventType.Information, Tracing.ArtifactResolveIn);
 
@@ -138,7 +139,7 @@ namespace dk.nita.saml20.protocol
                     HandleError(context, "Invalid Saml message signature");
                     AuditLogging.logEntry(Direction.IN, Operation.ARTIFACTRESOLVE, "Could not verify signature", parser.SamlMessage);
                 }
-                builder.RespondToArtifactResolve(parser.ArtifactResolve);
+                builder.RespondToArtifactResolve(idp, parser.ArtifactResolve);
             }else if(parser.IsArtifactResponse())
             {
                 Trace.TraceData(TraceEventType.Information, Tracing.ArtifactResponseIn);
@@ -293,7 +294,7 @@ namespace dk.nita.saml20.protocol
 
                 if (status.StatusCode.Value != Saml20Constants.StatusCodes.Success)
                 {
-                    if (status.StatusCode.Value == Saml20Constants.StatusCodes.NoPassive)
+                    if (status.StatusCode.Value == Saml20Constants.StatusCodes.Responder && status.StatusCode.SubStatusCode != null && Saml20Constants.StatusCodes.NoPassive == status.StatusCode.SubStatusCode.Value)
                         HandleError(context, "IdP responded with statuscode NoPassive. A user cannot be signed in with the IsPassiveFlag set when the user does not have a session with the IdP.");
 
                     HandleError(context, status);
@@ -684,6 +685,7 @@ namespace dk.nita.saml20.protocol
             //Save request message id to session
             SessionStore.CurrentSession[SessionConstants.ExpectedInResponseTo] = request.ID;
 
+            var shaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(idpEndpoint.ShaHashingAlgorithm);
             if (destination.Binding == SAMLBinding.REDIRECT)
             {
                 Trace.TraceData(TraceEventType.Information, string.Format(Tracing.SendAuthnRequest, Saml20Constants.ProtocolBindings.HTTP_Redirect, idpEndpoint.Id));
@@ -691,7 +693,7 @@ namespace dk.nita.saml20.protocol
                 HttpRedirectBindingBuilder builder = new HttpRedirectBindingBuilder();
                 builder.signingKey = _certificate.PrivateKey;
                 builder.Request = request.GetXml().OuterXml;
-                builder.ShaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(idpEndpoint.ShaHashingAlgorithm);
+                builder.ShaHashingAlgorithm = shaHashingAlgorithm;
                 string s = request.Destination + "?" + builder.ToQuery();
 
                 AuditLogging.logEntry(Direction.OUT, Operation.AUTHNREQUEST_REDIRECT, "Redirecting user to IdP for authentication", builder.Request);
@@ -709,7 +711,9 @@ namespace dk.nita.saml20.protocol
                 if (string.IsNullOrEmpty(request.ProtocolBinding))
                     request.ProtocolBinding = Saml20Constants.ProtocolBindings.HTTP_Post;
                 XmlDocument req = request.GetXml();
-                XmlSignatureUtils.SignDocument(req, request.ID);
+                var signingCertificate = FederationConfig.GetConfig().SigningCertificate.GetCertificate();
+                var signatureProvider = SignatureProviderFactory.CreateFromShaHashingAlgorithmName(shaHashingAlgorithm);
+                signatureProvider.SignAssertion(req, request.ID, signingCertificate);
                 builder.Request = req.OuterXml;
                 AuditLogging.logEntry(Direction.OUT, Operation.AUTHNREQUEST_POST);
 
@@ -722,12 +726,13 @@ namespace dk.nita.saml20.protocol
                 Trace.TraceData(TraceEventType.Information, string.Format(Tracing.SendAuthnRequest, Saml20Constants.ProtocolBindings.HTTP_Artifact, idpEndpoint.Id));
 
                 HttpArtifactBindingBuilder builder = new HttpArtifactBindingBuilder(context);
+                
                 //Honor the ForceProtocolBinding and only set this if it's not already set
-                if(string.IsNullOrEmpty(request.ProtocolBinding))
+                if (string.IsNullOrEmpty(request.ProtocolBinding))
                     request.ProtocolBinding = Saml20Constants.ProtocolBindings.HTTP_Artifact;
                 AuditLogging.logEntry(Direction.OUT, Operation.AUTHNREQUEST_REDIRECT_ARTIFACT);
 
-                builder.RedirectFromLogin(destination, request);
+                builder.RedirectFromLogin(idpEndpoint, destination, request);
             }
 
             HandleError(context, Resources.BindingError);

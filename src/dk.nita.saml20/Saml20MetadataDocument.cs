@@ -9,6 +9,7 @@ using dk.nita.saml20.Schema.Core;
 using dk.nita.saml20.Schema.Metadata;
 using dk.nita.saml20.Utils;
 using System.Configuration;
+using dk.nita.saml20.Bindings.SignatureProviders;
 
 namespace dk.nita.saml20
 {
@@ -529,41 +530,20 @@ namespace dk.nita.saml20
                 ((XmlDeclaration) doc.FirstChild).Encoding = enc.WebName;
             else            
                 doc.PrependChild(doc.CreateXmlDeclaration("1.0", enc.WebName, null));
-            
+
             if (Sign)
-                SignDocument(doc);
+            {
+                var metaDataShaHashingAlgorithm = FederationConfig.GetConfig().MetaDataShaHashingAlgorithm;
+                var validatedMetaDataShaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(metaDataShaHashingAlgorithm);
+                var signatureProvider = SignatureProviderFactory.CreateFromShaHashingAlgorithmName(validatedMetaDataShaHashingAlgorithm);
+
+                var cert = FederationConfig.GetConfig().SigningCertificate.GetCertificate();
+                signatureProvider.SignMetaData(doc, doc.DocumentElement.GetAttribute("ID"), cert);
+            }
 
             return doc.OuterXml;
-        }        
+        }
 
-        private static void SignDocument(XmlDocument doc)
-        {
-            X509Certificate2 cert = FederationConfig.GetConfig().SigningCertificate.GetCertificate();
-            
-            if (!cert.HasPrivateKey)
-                throw new InvalidOperationException("Private key access to the signing certificate is required.");
-
-            SignedXml signedXml = new SignedXml(doc);
-            signedXml.SignedInfo.CanonicalizationMethod = SignedXml.XmlDsigExcC14NTransformUrl;
-            signedXml.SigningKey = cert.PrivateKey;
-
-            // Retrieve the value of the "ID" attribute on the root assertion element.                        
-            Reference reference = new Reference("#" + doc.DocumentElement.GetAttribute("ID"));
-
-            reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
-            reference.AddTransform(new XmlDsigExcC14NTransform());
-
-            signedXml.AddReference(reference);
-
-            // Include the public key of the certificate in the assertion.
-            signedXml.KeyInfo = new KeyInfo();
-            signedXml.KeyInfo.AddClause(new KeyInfoX509Data(cert, X509IncludeOption.None /*X509IncludeOption.WholeChain*/));
-
-            signedXml.ComputeSignature();
-            // Append the computed signature. The signature must be placed as the sibling of the Issuer element.            
-            doc.DocumentElement.InsertBefore(doc.ImportNode(signedXml.GetXml(), true), doc.DocumentElement.FirstChild);
-        }    
-        
         /// <summary>
         /// Creates a default entity in the 
         /// </summary>

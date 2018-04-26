@@ -116,6 +116,7 @@ namespace dk.nita.saml20.protocol
         private void HandleArtifact(HttpContext context)
         {
             HttpArtifactBindingBuilder builder = new HttpArtifactBindingBuilder(context);
+            
             Stream inputStream = builder.ResolveArtifact();
 
             HandleSOAP(context, inputStream);
@@ -127,9 +128,11 @@ namespace dk.nita.saml20.protocol
 
             HttpArtifactBindingParser parser = new HttpArtifactBindingParser(inputStream);
             HttpArtifactBindingBuilder builder = new HttpArtifactBindingBuilder(context);
+            
             SAML20FederationConfig config = SAML20FederationConfig.GetConfig();
 
             IDPEndPoint idp = RetrieveIDPConfiguration(parser.Issuer);
+            var shaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(idp.ShaHashingAlgorithm);
             AuditLogging.IdpId = idp.Id;
 
 
@@ -144,7 +147,7 @@ namespace dk.nita.saml20.protocol
                 }
                 AuditLogging.AssertionId = parser.ArtifactResolve.ID;
                 AuditLogging.logEntry(Direction.IN, Operation.ARTIFACTRESOLVE, "", parser.SamlMessage);
-                builder.RespondToArtifactResolve(parser.ArtifactResolve);
+                builder.RespondToArtifactResolve(idp, parser.ArtifactResolve);
             }
             else if (parser.IsArtifactResponse())
             {
@@ -169,12 +172,10 @@ namespace dk.nita.saml20.protocol
                     LogoutRequest req = Serialization.DeserializeFromXmlString<LogoutRequest>(parser.ArtifactResponse.Any.OuterXml);
                     response.StatusCode = Saml20Constants.StatusCodes.Success;
                     response.InResponseTo = req.ID;
-                    Saml20AssertionLite saml20AssertionLite = Saml20PrincipalCache.GetSaml20AssertionLite();
-                    IDPEndPoint endpoint = RetrieveIDPConfiguration(saml20AssertionLite.Issuer);
                     IDPEndPointElement destination =
-                        DetermineEndpointConfiguration(SAMLBinding.REDIRECT, endpoint.SLOEndpoint, endpoint.metadata.SLOEndpoints());
+                        DetermineEndpointConfiguration(SAMLBinding.REDIRECT, idp.SLOEndpoint, idp.metadata.SLOEndpoints());
 
-                    builder.RedirectFromLogout(destination, response);
+                    builder.RedirectFromLogout(idp, destination, response);
                 }
                 else if (parser.ArtifactResponse.Any.LocalName == LogoutResponse.ELEMENT_NAME)
                 {
@@ -233,7 +234,9 @@ namespace dk.nita.saml20.protocol
                 response.StatusCode = Saml20Constants.StatusCodes.Success;
                 response.InResponseTo = req.ID;
                 XmlDocument doc = response.GetXml();
-                XmlSignatureUtils.SignDocument(doc, response.ID);
+                var signingCertificate = FederationConfig.GetConfig().SigningCertificate.GetCertificate();
+                                var signatureProvider = SignatureProviderFactory.CreateFromShaHashingAlgorithmName(shaHashingAlgorithm);
+                signatureProvider.SignAssertion(doc, response.ID, signingCertificate);
                 if (doc.FirstChild is XmlDeclaration)
                     doc.RemoveChild(doc.FirstChild);
 
@@ -273,6 +276,7 @@ namespace dk.nita.saml20.protocol
 
             request.SubjectToLogOut.Format = Saml20PrincipalCache.GetSaml20AssertionLite().Subject.Format;
 
+            var shaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(endpoint.ShaHashingAlgorithm);
             if (destination.Binding == SAMLBinding.POST)
             {
                 HttpPostBindingBuilder builder = new HttpPostBindingBuilder(destination);
@@ -281,7 +285,9 @@ namespace dk.nita.saml20.protocol
                 request.SubjectToLogOut.Value = Saml20PrincipalCache.GetSaml20AssertionLite().Subject.Value;
                 request.SessionIndex = Saml20PrincipalCache.GetSaml20AssertionLite().SessionIndex;
                 XmlDocument requestDocument = request.GetXml();
-                XmlSignatureUtils.SignDocument(requestDocument, request.ID);
+                var signingCertificate = FederationConfig.GetConfig().SigningCertificate.GetCertificate();
+                var signatureProvider = SignatureProviderFactory.CreateFromShaHashingAlgorithmName(shaHashingAlgorithm);
+                signatureProvider.SignAssertion(requestDocument, request.ID, signingCertificate);
                 builder.Request = requestDocument.OuterXml;
 
                 if (Trace.ShouldTrace(TraceEventType.Information))
@@ -302,7 +308,7 @@ namespace dk.nita.saml20.protocol
                 request.SubjectToLogOut.Value = Saml20PrincipalCache.GetSaml20AssertionLite().Subject.Value;
                 request.SessionIndex = Saml20PrincipalCache.GetSaml20AssertionLite().SessionIndex;
                 builder.Request = request.GetXml().OuterXml;
-                builder.ShaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(endpoint.ShaHashingAlgorithm);
+                builder.ShaHashingAlgorithm = shaHashingAlgorithm;
 
                 string redirectUrl = destination.Url + "?" + builder.ToQuery();
 
@@ -326,7 +332,7 @@ namespace dk.nita.saml20.protocol
 
                 HttpArtifactBindingBuilder builder = new HttpArtifactBindingBuilder(context);
                 AuditLogging.logEntry(Direction.OUT, Operation.LOGOUTREQUEST, "Method: Artifact");
-                builder.RedirectFromLogout(destination, request, Guid.NewGuid().ToString("N"));
+                builder.RedirectFromLogout(endpoint, destination, request, Guid.NewGuid().ToString("N"));
             }
 
             HandleError(context, Resources.BindingError);
@@ -573,13 +579,14 @@ namespace dk.nita.saml20.protocol
             response.InResponseTo = logoutRequest.ID;
 
             //Respond using redirect binding
+            var shaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(endpoint.ShaHashingAlgorithm);
             if (destination.Binding == SAMLBinding.REDIRECT)
             {
                 HttpRedirectBindingBuilder builder = new HttpRedirectBindingBuilder();
                 builder.RelayState = context.Request.Params["RelayState"];
                 builder.Response = response.GetXml().OuterXml;
                 builder.signingKey = FederationConfig.GetConfig().SigningCertificate.GetCertificate().PrivateKey;
-                builder.ShaHashingAlgorithm = SignatureProviderFactory.ValidateShaHashingAlgorithm(endpoint.ShaHashingAlgorithm);
+                builder.ShaHashingAlgorithm = shaHashingAlgorithm;
                 string s = destination.Url + "?" + builder.ToQuery();
                 context.Response.Redirect(s, true);
                 return;
@@ -591,7 +598,9 @@ namespace dk.nita.saml20.protocol
                 HttpPostBindingBuilder builder = new HttpPostBindingBuilder(destination);
                 builder.Action = SAMLAction.SAMLResponse;
                 XmlDocument responseDocument = response.GetXml();
-                XmlSignatureUtils.SignDocument(responseDocument, response.ID);
+                var signingCertificate = FederationConfig.GetConfig().SigningCertificate.GetCertificate();
+                var signatureProvider = SignatureProviderFactory.CreateFromShaHashingAlgorithmName(shaHashingAlgorithm);
+                signatureProvider.SignAssertion(responseDocument, response.ID, signingCertificate);
                 builder.Response = responseDocument.OuterXml;
                 builder.RelayState = context.Request.Params["RelayState"];
                 builder.GetPage().ProcessRequest(context);

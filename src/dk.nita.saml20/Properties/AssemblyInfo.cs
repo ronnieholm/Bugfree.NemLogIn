@@ -31,6 +31,6 @@ using System.Web.UI;
 [assembly: WebResource("dk.nita.saml20.Protocol.Resources.DefaultStyle.css", "text/css")]
 
 // Ronnie Holm: Moved from CommonAssemblyInfo.cs
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
-[assembly: AssemblyInformationalVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.0.2.0")]
+[assembly: AssemblyFileVersion("2.0.2.0")]
+[assembly: AssemblyInformationalVersion("2.0.2.0")]
