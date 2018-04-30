@@ -92,7 +92,8 @@ dk.nita.saml20 and dk.nita.saml20.ext.audit.log4net projects.
 
 The following supplements the steps from [.NET SAML2 Service Provider
 Framework](https://svn.softwareborsen.dk/oiosaml.net/trunk/Net%20SAML2%20Service%20Provider%20Framework.docx),
-Section 6.1.
+Section 6.1 (do note that a one-time keycard is required to log onto
+the NemLogIn test environment).
 
   1. Copy the IdP-metadata files from
      oiosaml.net\src\dk.nita.saml20\WebsiteDemo\idp-metadata into
