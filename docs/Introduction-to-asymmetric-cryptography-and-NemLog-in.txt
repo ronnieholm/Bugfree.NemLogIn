@@ -102,7 +102,7 @@
        prove its identity to the server.
 
        With TLS, payload isn't actually encrypted/decrypted using
-       asymetric cryptography. Only the initial exchange of the
+       asymmetric cryptography. Only the initial exchange of the
        session key is. During initial TLS setup, Diffie-Hellman key
        exchange is often used to generate and exchange a symmetric key
        used to encrypt/decrypt remaining trafic (symmetric encryption
