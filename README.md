@@ -71,11 +71,11 @@ To use NemLog-in from source, we must
       files no longer part of OIOSAML.Net.
 
    2. The dk.nita.saml20 and dk.nita.saml20.ext.audit.log4net projects projects
-      cannot compile outside the OIOSAML.Net solution unless we append the contents
-      of src\dk.nita.saml20\CommonAssemblyInfo.cs to the projects' AssemblyInfo.cs
-      files. Instead of maintaining version attributes in two places, OIOSAML.Net
-      refers to a common location which after copying the projecs leads to the
-      following compiler error:
+      cannot compile outside the OIOSAML.Net solution unless we append the
+      contents of src\dk.nita.saml20\CommonAssemblyInfo.cs to the projects'
+      AssemblyInfo.cs files. Instead of maintaining version attributes in two
+      places, OIOSAML.Net refers to a common location which after copying the
+      projects leads to the following compiler error:
 
       error CS2001: Source file 'Bugfree.NemLogIn\src\dk.nita.saml20\..\CommonAssemblyInfo.cs' could not be found.
 
@@ -83,7 +83,7 @@ To use NemLog-in from source, we must
       OIOSAML.Net) to the existing AssemblyInfo.cs files:
 
       ```
-      // Ronnie Holm: Copied from CommonAssemblyInfo.cs
+      // Copied from CommonAssemblyInfo.cs
       [assembly: AssemblyVersion("2.0.2.0")]
       [assembly: AssemblyFileVersion("2.0.2.0")]
       [assembly: AssemblyInformationalVersion("2.0.2.0")]
@@ -151,12 +151,12 @@ NemLogIn test environment, but not with the Demo IdP).
    Now IISExpress to respond to any domain on port 20002, not just
    https://localhost:20002.
 
-## Develop locally by using the OIOSAML.Net local IdP:
+## Develop locally by using the OIOSAML.Net local IdP
 
 During service provider development, continuously having to log into the
-NemLog-in test IdP is a hassle. Instead, either use the local identity provider.
-This way, any assertion returned by the actual NemLog-in IdP can be changed in a
-moment, exercising different code paths.
+NemLog-in test IdP is a hassle. Instead, use the local identity provider. This
+way, any assertion returned by the actual NemLog-in IdP can be changed in a
+moment, possibly exercising different code paths.
 
 ## Updating the metadata file for a new service provider
 
@@ -242,9 +242,9 @@ development tools aren't useful is tracing requests and responses. Every time a
 redirect takes place, the network request tab is cleared.
 
 To supplement or replace a Fiddler, Wireshark may be used. As communication
-happens over TLS, we must decrypt the trafic. Unlike Fiddler which acts as  a
+happens over TLS, we must decrypt the traffic. Unlike Fiddler which acts as  a
 man-in-the-middle proxy server, which will not work in cases where certificate
-pinning is employeed, Wireshark records the traffic as is, invisible to
+pinning is employed, Wireshark records the traffic as is, invisible to
 communicating parties.
 
 In order for Wireshark to decrypt TLS sessions, the browser's shared sessions
@@ -282,7 +282,6 @@ logging in. It's unclear if this error message is a feature or a bug.
 - [Youtube: Introduction to SAML - Introduction to SAML - Chalktalk on
 what is it, how it is
 used](https://www.youtube.com/watch?v=S9BpeOmuEz4&list=PLSEDryV9VNWHYtyWrFc_TpMYRwemphDTS)
-
 - [.NET SAML2 Service Provider
 Framework](https://github.com/digst/OIOSAML.Net/blob/master/Net%20SAML2%20Service%20Provider%20Framework.docx)
 
