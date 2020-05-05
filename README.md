@@ -225,7 +225,19 @@ a hassle. For this case use the local IdP. This way, any assertion returned by a
 full-featured NemLogin IdP, and relevant to the SP's domain, can be easily
 modified, possibly exercising different code paths useful in testing.
 
-## Debugging on a server without Visual Studio
+## Troubleshooting
+
+### Browser shows "Saml20Indentity not initialized" error message
+
+The application has lost track that the user is logged in. If we logout by
+navigating to https://oiosaml-net.dk:20002/logout.ashx and navigate back to a
+page requirering authentication, the OIOSAML.Net library will redirect the
+browser to the NemLogin IdP which may determines that the user is still logged
+into it. The IdP then redirects the browser back to the original page, providing
+the SP the SAML response once again, but without the need for the user to
+explicitly login. It's unclear if this error message is a feature or a bug.
+
+## Debugging outside of Visual Studio
 
 On a production server with no Visual Studio installed, zero footprint tools
 such as [dnspy](https://github.com/0xd4d/dnSpy) or
@@ -278,18 +290,6 @@ shared symmetric session key. It's these sessions keys that end up in the file.
 
 With Wireshark, it becomes evident that NemLog-in IdP is using HTTP/2. For
 easier debugging, force communication to use the regular HTTP protocol.
-
-## Troubleshooting
-
-### Browser shows "Saml20Indentity not initialized" error message
-
-The application has lost track that the user is logged in. If we logout by
-navigating to https://oiosaml-net.dk:20002/logout.ashx and navigate back to a
-page requirering authentication, the OIOSAML.Net library will redirect the
-browser to the NemLogin IdP which may determines that the user is still logged
-into it. The IdP then redirects the browser back to the original page, providing
-the SP the SAML response once again, but without the need for the user to
-explicitly login. It's unclear if this error message is a feature or a bug.
 
 ## References
 
