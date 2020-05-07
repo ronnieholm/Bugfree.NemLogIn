@@ -7,8 +7,8 @@ This repository contains
   SP part of the [OIOSAML.Net](https://github.com/digst/OIOSAML.Net)
   authentication solution.
 - [Notes on asymmetric cryptography and
-  NemLog-in](docs/Introduction-to-asymmetric-cryptography-and-NemLog-in.txt) to
-  augment official NemLogIn documentation which assumes the reader is already
+  NemLog-in](docs/Introduction-to-asymmetric-cryptography-and-NemLog-in.md) to
+  augment official NemLog-in documentation which assumes the reader is already
   familiar with the concepts of certificates, encryption, and signing.
 
 ## Getting started
@@ -33,7 +33,7 @@ In order to run the MVC demo, one must have carried out the [.NET SAML2 Service
 Provider
 Framework](https://github.com/digst/OIOSAML.Net/blob/master/Net%20SAML2%20Service%20Provider%20Framework.docx)
 setup. To validate prerequisites, ensure the OIOSAML.Net provided local demo and
-the remote NemLogIn test IdPs are working with the OIOSAML.Net demo SP.
+the remote NemLog-in test IdPs are working with the OIOSAML.Net demo SP.
 
 The following are supplementary notes on how to setup the .NET SAML2 Service
 Provider framework.
@@ -67,7 +67,7 @@ to review changes during an upgrade.
 
 ### Copying projects from OIOSAML.Net into Bugfree.NemLogIn.Web
 
-To make use of NemLogIn from source, we must
+To make use of NemLog-in from source, we must
 
    1. Copy the dk.nita.saml20 and dk.nita.saml20.ext.audit.log4net projects from
       the Git repository into our solution (or use Git submodules). If the
@@ -108,7 +108,7 @@ To make use of NemLogIn from source, we must
 
 The following supplements [.NET SAML2 Service Provider
 Framework](https://github.com/digst/OIOSAML.Net/blob/master/Net%20SAML2%20Service%20Provider%20Framework.docx),
-Section 6.1. A one-time key card is required to login against the NemLogIn test
+Section 6.1. A one-time key card is required to login against the NemLog-in test
 environment, but not the Demo IdP:
 
   1. Copy IdP-metadata files from
@@ -220,9 +220,9 @@ the SP's metadata:
 
 ## Develop locally by using the OIOSAML.Net local IdP
 
-During SP development, continuously having to login to the NemLogin test IdP is
+During SP development, continuously having to login to the NemLog-in test IdP is
 a hassle. For this case use the local IdP. This way, any assertion returned by a
-full-featured NemLogin IdP, and relevant to the SP's domain, can be easily
+full-featured NemLog-in IdP, and relevant to the SP's domain, can be easily
 modified, possibly exercising different code paths useful in testing.
 
 ## Troubleshooting
@@ -232,7 +232,7 @@ modified, possibly exercising different code paths useful in testing.
 The application has lost track that the user is logged in. If we logout by
 navigating to https://oiosaml-net.dk:20002/logout.ashx and navigate back to a
 page requirering authentication, the OIOSAML.Net library will redirect the
-browser to the NemLogin IdP which may determines that the user is still logged
+browser to the NemLog-in IdP which may determines that the user is still logged
 into it. The IdP then redirects the browser back to the original page, providing
 the SP the SAML response once again, but without the need for the user to
 explicitly login. It's unclear if this error message is a feature or a bug.
@@ -298,6 +298,7 @@ what is it, how it is
 used](https://www.youtube.com/watch?v=S9BpeOmuEz4&list=PLSEDryV9VNWHYtyWrFc_TpMYRwemphDTS)
 - [.NET SAML2 Service Provider
 Framework](https://github.com/digst/OIOSAML.Net/blob/master/Net%20SAML2%20Service%20Provider%20Framework.docx)
+- [Wikipedia: SAML 2.0](https://en.wikipedia.org/wiki/SAML_2.0)
 
 ## Contact
 
