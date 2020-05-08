@@ -194,6 +194,6 @@ HTTPS = SSL = TLS certificates are stored in certificate store as well.
 
 ## Overview of oiosaml.net package and MVC sample
 
-- [.NET SAML2 Service Provider Framework](https://svn.softwareborsen.dk/oiosaml.net/trunk/Net%20SAML2%20Service%20Provider%20Framework.docx)
+- [.NET SAML2 Service Provider Framework](https://github.com/digst/OIOSAML.Net)
 - [Introduction to SAML - Chalktalk on what is it, how it is used](https://www.youtube.com/watch?v=S9BpeOmuEz4)
 - [Wikipedia: SAML 2.0](https://en.wikipedia.org/wiki/SAML_2.0)
