@@ -79,14 +79,16 @@
   ```
 ## Required keys / certificates
 
-- Sender                Receiver
+- ```
+  Sender                Receiver
   K_sender_enc_pub      K_receiver_enc_pub            
   K_sender_enc_pri      K_receiver_enc_pri
   
   K_sender_sig_pub      K_receiver_sig_pub
   K_sender_sig_pri      K_receiver_sig_pri
+  ```
 
-  There's no technical difference between enc and sig certificates -- it's about
+- There's no technical difference between enc and sig certificates -- it's about
   designation of usage. In principle, certificates may be switched or the same
   certificate may be used for both encryption and signing.
 
@@ -101,14 +103,16 @@
 - [Transport/session layer encryption](http://bpastudio.csudh.edu/fac/lpress/471/hout/netech/tcpvosi2.gif)
   of communication takes place also.
   
-- Server              Client  
+- ```
+  Server              Client  
   K_server_tls_pub    K_client_tls_pub
   K_server_tls_pri    K_client_tls_pri
+  ```
 
-  Client usually don't have its own certificate so it cannot prove its identity
+- Client usually don't have its own certificate so it cannot prove its identity
   to the server.
 
-  With TLS, payload isn't actually encrypted/decrypted using asymmetric
+- With TLS, payload isn't actually encrypted/decrypted using asymmetric
   cryptography. Only the initial exchange of the session key is. During initial
   TLS setup, Diffie-Hellman key exchange is often used to generate and exchange
   a symmetric key used to encrypt/decrypt remaining traffic (because symmetric
