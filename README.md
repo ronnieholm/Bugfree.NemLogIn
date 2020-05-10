@@ -239,8 +239,8 @@ explicitly login. It's unclear if this error message is a feature or a bug.
 
 ## Debugging outside of Visual Studio
 
-On a production server with no Visual Studio installed, zero footprint tools
-such as [dnspy](https://github.com/0xd4d/dnSpy) or
+On a production server with no Visual Studio installed, besides enabling SP
+logging, zero footprint tools such as [dnspy](https://github.com/0xd4d/dnSpy) or
 [WinDbg](https://developer.microsoft.com/en-us/windows/hardware/download-windbg)
 are useful for tracing code. dnspy may disassemble IL to C# and supports setting
 breakpoints and inspecting the value of variables based on reverse engineered
