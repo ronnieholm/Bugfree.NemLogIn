@@ -116,13 +116,14 @@ environment, but not the Demo IdP:
      \src\Bugfree.NemLogIn.Web\IdP-metadata. This enables the SP to communicate
      with the local demo and remote IdPs.
 
-  2. To test against the NemLog-in test IdP, the IP at which the SP is running
-     must be whitelisted with Nets' certificate revocation list
-     server. Otherwise, login against the IdP will succeed but once the result
-     is posted back to the SP, the certificate used to sign the IdP's response
-     cannot be verified, causing an exception at the SP. Testing from a
-     non-whitelisted IP, we can disable verifying certification chain trust by
-     editing Web.config, adding the omitAssertionSignatureCheck attribute:
+  2. To test against the NemLog-in test IdP, the root certificate of the IdP
+     signing certificate chain must first be installed to the Windows
+     Certificate Store (it isn't part of the OIOSAML.Net package). Otherwise,
+     login against the IdP succeeds but once the result is posted back to the
+     SP, a SecurityTokenValidationException (with message "The signature of the
+     incoming message is invalid") is raised. We can disable verifying
+     certification chain trust by editing Web.config, adding the
+     omitAssertionSignatureCheck attribute as below:
 
      ```
      <IDPEndPoints metadata="IdP-metadata">
