@@ -47,6 +47,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="dk.nita.saml20, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\OIOSAML.Net\src\dk.nita.saml20\dk.nita.saml20\bin\Debug\dk.nita.saml20.dll</HintPath>
+    </Reference>
+    <Reference Include="dk.nita.saml20.ext.audit.log4net, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\OIOSAML.Net\src\dk.nita.saml20\dk.nita.saml20.ext.audit.log4net\bin\Debug\dk.nita.saml20.ext.audit.log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\OIOSAML.Net\src\dk.nita.saml20\dk.nita.saml20.ext.audit.log4net\bin\Debug\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -255,16 +267,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dk.nita.saml20.ext.audit.log4net\dk.nita.saml20.ext.audit.log4net.csproj">
-      <Project>{e0529cb0-9183-4768-b654-db0f867f0e5f}</Project>
-      <Name>dk.nita.saml20.ext.audit.log4net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dk.nita.saml20\dk.nita.saml20.csproj">
-      <Project>{55520059-38bb-48bb-a30e-bfd385293d78}</Project>
-      <Name>dk.nita.saml20</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
