@@ -40,69 +40,42 @@ Provider framework.
 
 ## Setting up a new service provider
 
-These steps have been verified on Windows Server 2019. 
+These steps have been verified on Windows Server 2019.
 
-First, the steps outlined in OIOSAML.Net
-[readme.md](https://github.com/digst/OIOSAML.Net/blob/master/readme.md) was
-carried out as-is.
+    $ git clone --recurse-submodules https://github.com/ronnieholm/Bugfree.NemLogIn.git
 
-### Cloning OIOSAML.Net source from Github
+<!--
+   or 
+    $ git clone https://github.com/ronnieholm/Bugfree.NemLogIn.git
+    $ git submodule init
+    $ git submodule update
+-->
 
-For easier debugging and the ability to step through OIOSAML.Net library code,
-source distribution is preferred over referencing the
-[NuGet](https://www.nuget.org/packages/dk.nita.saml20) package.
+The above command cloned OIOSAML.Net as a Git
+[submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) into
+```libs/OIOSAML.Net```. From within that folder, follow the setup steps outlined
+in [readme.md](https://github.com/digst/OIOSAML.Net/blob/master/readme.md) to
+setup and run the OIOSAML.Net provided SP and IdP.
 
-To clone and view available releases (current development takes place in
-master):
+We clone OIOSAML.Net as a submodule for easier debugging and the ability to step
+through OIOSAML.Net library code. The alternative would be referencing the
+[NuGet](https://www.nuget.org/packages/dk.nita.saml20) package from our SP.
 
-    % git clone https://github.com/digst/OIOSAML.Net.git
-    % git tag
+Within the ```libs/OIOSAML.Net``` folder, view available releases:
+
+    $ git tag
     2.0.0
     ...
     release-2.0.2
     release-2.0.3
 
-In general, one should make a note of the commit hash used. That way it's easier
-to review changes during an upgrade.
+Current OIOSAML.Net development takes place in main.
 
-### Copying projects from OIOSAML.Net into Bugfree.NemLogIn.Web
+Open the OIOSAML.Net solution to generate assemblies required by the SP.
 
-To make use of NemLog-in from source, we must
-
-   1. Copy the dk.nita.saml20 and dk.nita.saml20.ext.audit.log4net projects from
-      the Git repository into our solution (or use Git submodules). If the
-      project directories already exist, first remove those or use a directory
-      diffing tool. Simply overriding the folder structures will not remove any
-      files no longer part of OIOSAML.Net.
-
-   2. The dk.nita.saml20 and dk.nita.saml20.ext.audit.log4net projects cannot
-      compile outside the OIOSAML.Net solution unless we append the content of
-      [src\dk.nita.saml20\CommonAssemblyInfo.cs](https://github.com/digst/OIOSAML.Net/blob/master/src/dk.nita.saml20/CommonAssemblyInfo.cs)
-      to the projects' AssemblyInfo.cs files. 
-      
-      Rather than maintain version attributes in two places, OIOSAML.Net has
-      opted for a common location which after copying the projects would lead to
-      the following compiler error:
-
-      ```
-      error CS2001: Source file 'Bugfree.NemLogIn\src\dk.nita.saml20\..\CommonAssemblyInfo.cs' could not be found.
-      ```
-
-      After appending the lines below to the existing AssemblyInfo.cs files
-
-      ```
-      // Copied from CommonAssemblyInfo.cs
-      [assembly: AssemblyVersion("2.0.2.0")]
-      [assembly: AssemblyFileVersion("2.0.2.0")]
-      [assembly: AssemblyInformationalVersion("2.0.2.0")]
-      ```
-
-      delete from the projects the file reference to CommonAssemblyInfo.cs to
-      resolve the compilation error.
-
-   3. Finally, add to Bugfree.NemLogIn.Web references to the dk.nita.saml20 and
-      dk.nita.saml20.ext.audit.log4net projects. Use of Log4Net is hardcoded
-      into the solution.
+Open our SP and run it. It automatically picks up assemblies output by
+OIOSAML.Net soluton. The two nita assemblies were previosly added as project
+references.
 
 ### Setting up Bugfree.NemLogIn.Web to use OIOSAML.Net
 
