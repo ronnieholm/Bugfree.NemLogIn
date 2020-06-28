@@ -1,0 +1,3 @@
+[submodule "libs/OIOSAML.Net"]
+	path = libs/OIOSAML.Net
+	url = https://github.com/digst/OIOSAML.Net.git
