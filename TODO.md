@@ -1,6 +1,9 @@
 # TODO
 
-- Add that one would use an existing generic SAML-framework iwith PHP, .NET Core, but would to handle OIOSAML specific attributes
+- In IdP, no need for special prefix to determine citizen or employee. Infer from PPID property.
+- Move to web.config the serialized IdP strings currently in XML file
+- Remove not needed pages/controls on IdP pages
+- Add that one would use an existing generic SAML-framework with PHP, .NET Core, but would to handle OIOSAML specific attributes
 - Include link to https://www.samltool.com/sp_metadata.php
 - Add "Preserve log" description
 - Add IdP to Bugfree.NemLogIn project
