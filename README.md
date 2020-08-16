@@ -11,6 +11,8 @@ This repository contains
   augment official NemLog-in documentation which assumes the reader is already
   familiar with the concepts of certificates, encryption, and signing.
 
+<hr/>
+
 <!-- TOC -->
 
 - [Getting started](#getting-started)
