@@ -1,15 +1,20 @@
 # Bugfree.NemLogIn
 
-This repository contains
+<!-- TOC -->
 
-- An ASP.NET MVC demo service provider (SP) adapted from the regular ASP.NET
-  [WebSiteDemo](https://github.com/digst/OIOSAML.Net/tree/master/src/dk.nita.saml20/WebsiteDemo)
-  SP part of the [OIOSAML.Net](https://github.com/digst/OIOSAML.Net)
-  authentication solution.
-- [Notes on asymmetric cryptography and
-  NemLog-in](docs/Introduction-to-asymmetric-cryptography-and-NemLog-in.md) to
-  augment official NemLog-in documentation which assumes the reader is already
-  familiar with the concepts of certificates, encryption, and signing.
+- [Getting started](#getting-started)
+- [Setting up a new service provider](#setting-up-a-new-service-provider)
+    - [Setting up Bugfree.NemLogIn.Web to use OIOSAML.Net](#setting-up-bugfreenemloginweb-to-use-oiosamlnet)
+    - [Updating the metadata file for a new service provider](#updating-the-metadata-file-for-a-new-service-provider)
+    - [Updating the Web.config file for a new service provider](#updating-the-webconfig-file-for-a-new-service-provider)
+- [Develop locally by using the OIOSAML.Net local IdP](#develop-locally-by-using-the-oiosamlnet-local-idp)
+- [Troubleshooting](#troubleshooting)
+    - [Browser shows "Saml20Indentity not initialized" error message](#browser-shows-saml20indentity-not-initialized-error-message)
+- [Debugging outside of Visual Studio](#debugging-outside-of-visual-studio)
+- [References](#references)
+- [Contact](#contact)
+
+<!-- /TOC -->
 
 ## Getting started
 
@@ -18,14 +23,14 @@ https://oiosaml-net.dk:20002/Home, it looks like this:
 
 ![Home](docs/Home.png)
 
-Following the "Goto page requirering authentication" link causes the OIOSAML.Net
+Following the "Goto page requiring authentication" link causes the OIOSAML.Net
 library to take over. It redirects the user's browser to a NemLog-in identity
 provider (IdP), or in case of multiple providers presents the user with a list
 of IdPs to choose from.
 
 On successful authentication with an IdP, the user's browser is redirected back
 to https://oiosaml-net.dk:20002/RequiresAuthentication, the page originally
-requirering authentication, listing each SAML assertion returned by the IdP:
+requiring authentication, listing each SAML assertion returned by the IdP:
 
 ![Requires authentication](docs/RequiresAuthentication.png)
 
@@ -74,7 +79,7 @@ Current OIOSAML.Net development takes place in main.
 Open the OIOSAML.Net solution to generate assemblies required by the SP.
 
 Open our SP and run it. It automatically picks up assemblies output by
-OIOSAML.Net soluton. The two nita assemblies were previosly added as project
+OIOSAML.Net solution. The two nita assemblies were previously added as project
 references.
 
 ### Setting up Bugfree.NemLogIn.Web to use OIOSAML.Net
@@ -152,7 +157,7 @@ secret. After modifying the metadata, the file must be uploaded through the
 with an employee NemID may be granted access by a company administrator to
 upload new metadata.
 
-Starting from the demo SP's metadata, here're the parts that require
+Starting from the demo SP's metadata, here's the parts that require
 substitution to work with a new SP:
 
   1. Inside the EntityDescriptor element, update the entityID attribute to match
@@ -205,11 +210,11 @@ modified, possibly exercising different code paths useful in testing.
 
 The application has lost track that the user is logged in. If we logout by
 navigating to https://oiosaml-net.dk:20002/logout.ashx and navigate back to a
-page requirering authentication, the OIOSAML.Net library will redirect the
-browser to the NemLog-in IdP which may determines that the user is still logged
-into it. The IdP then redirects the browser back to the original page, providing
-the SP the SAML response once again, but without the need for the user to
-explicitly login. It's unclear if this error message is a feature or a bug.
+page requiring authentication, the OIOSAML.Net library will redirect the browser
+to the NemLog-in IdP which may determines that the user is still logged into it.
+The IdP then redirects the browser back to the original page, providing the SP
+the SAML response once again, but without the need for the user to explicitly
+login. It's unclear if this error message is a feature or a bug.
 
 ## Debugging outside of Visual Studio
 
