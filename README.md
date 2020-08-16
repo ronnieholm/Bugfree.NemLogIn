@@ -1,5 +1,16 @@
 # Bugfree.NemLogIn
 
+This repository contains
+
+- An ASP.NET MVC demo service provider (SP) adapted from the regular ASP.NET
+  [WebSiteDemo](https://github.com/digst/OIOSAML.Net/tree/master/src/dk.nita.saml20/WebsiteDemo)
+  SP part of the [OIOSAML.Net](https://github.com/digst/OIOSAML.Net)
+  authentication solution.
+- [Notes on asymmetric cryptography and
+  NemLog-in](docs/Introduction-to-asymmetric-cryptography-and-NemLog-in.md) to
+  augment official NemLog-in documentation which assumes the reader is already
+  familiar with the concepts of certificates, encryption, and signing.
+
 <!-- TOC -->
 
 - [Getting started](#getting-started)
