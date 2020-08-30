@@ -29,14 +29,13 @@ This repository contains
 
 <!-- TOC -->
 
-- [Bugfree.NemLogIn](#bugfreenemlogin)
-    - [Getting started](#getting-started)
-    - [Updating the metadata file for a new service provider](#updating-the-metadata-file-for-a-new-service-provider)
-    - [Updating web.config for a new service provider](#updating-webconfig-for-a-new-service-provider)
-    - [Authenticate locally using the OIOSAML.Net local IdP](#authenticate-locally-using-the-oiosamlnet-local-idp)
-    - [Debugging outside of Visual Studio](#debugging-outside-of-visual-studio)
-    - [References](#references)
-    - [Contact](#contact)
+- [Getting started](#getting-started)
+- [Updating the metadata file for a new service provider](#updating-the-metadata-file-for-a-new-service-provider)
+- [Updating web.config for a new service provider](#updating-webconfig-for-a-new-service-provider)
+- [Authenticate locally using the OIOSAML.Net local IdP](#authenticate-locally-using-the-oiosamlnet-local-idp)
+- [Debugging outside of Visual Studio](#debugging-outside-of-visual-studio)
+- [References](#references)
+- [Contact](#contact)
 
 <!-- /TOC -->
 
@@ -116,7 +115,7 @@ assemblies were previously added as project references to Bugfree.NemLogIn.Web.
    Then start the application in debugging mode and execution halts at the
    breakpoint.
 
-3. Open Bugfree.NemLogIn.sln in VS elevated mode (because of required IIExpress
+3. Open Bugfree.NemLogIn.sln in VS elevated mode (because of required IISExpress
    hostname binding). Starting VS triggers the creation of the .vs folder at the
    solution level. VS infers initial IISExpress configuration by inspecting the
    web projects in the solution and, starting from a template, updates the
@@ -180,7 +179,7 @@ assemblies were previously added as project references to Bugfree.NemLogIn.Web.
    authentication against the NemLog-in test IdP succeeds but once the result is
    posted back to the SP, a `SecurityTokenValidationException` with message `The
    signature of the incoming message is invalid` is raised. We can disable
-   verifying certification chain trust by editing Web.config, adding the
+   verifying certification chain trust by editing web.config, adding the
    `omitAssertionSignatureCheck` attribute as below:
 
      ```xml
