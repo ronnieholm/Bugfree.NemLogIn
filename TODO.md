@@ -11,3 +11,5 @@
 - Read https://en.wikipedia.org/wiki/XML_Encryption (read on w3c site)
 - Read https://en.wikipedia.org/wiki/XML_Signature (read on w3c site)
 - Read https://digitaliser.dk/resource/2377872
+- Use NemLog-in with single-page application as in
+  https://medium.com/lightrail/getting-token-authentication-right-in-a-stateless-single-page-application-57d0c6474e3

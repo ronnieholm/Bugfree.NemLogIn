@@ -29,13 +29,14 @@ This repository contains
 
 <!-- TOC -->
 
-- [Getting started](#getting-started)
-- [Updating the metadata file for a new service provider](#updating-the-metadata-file-for-a-new-service-provider)
-- [Updating web.config for a new service provider](#updating-webconfig-for-a-new-service-provider)
-- [Authenticate locally using the OIOSAML.Net local IdP](#authenticate-locally-using-the-oiosamlnet-local-idp)
-- [Debugging outside of Visual Studio](#debugging-outside-of-visual-studio)
-- [References](#references)
-- [Contact](#contact)
+- [Bugfree.NemLogIn](#bugfreenemlogin)
+    - [Getting started](#getting-started)
+    - [Updating the metadata file for a new service provider](#updating-the-metadata-file-for-a-new-service-provider)
+    - [Updating web.config for a new service provider](#updating-webconfig-for-a-new-service-provider)
+    - [Authenticate locally using the OIOSAML.Net local IdP](#authenticate-locally-using-the-oiosamlnet-local-idp)
+    - [Debugging outside of Visual Studio](#debugging-outside-of-visual-studio)
+    - [References](#references)
+    - [Contact](#contact)
 
 <!-- /TOC -->
 
