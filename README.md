@@ -131,9 +131,9 @@ assemblies were previously added as project references to Bugfree.NemLogIn.Web.
    are reused from the OIOSAML.Net package:
 
    ```
-   "%programfiles%\IIS Express\appcmd.exe" set site "Bugfree.NemLogIn.IdP" /+bindings.[protocol='https',bindingInformation='*:20001:'] /apphostconfig:"%USERPROFILE%\source\repos\Bugfree.NemLogIn\.vs\Bugfree.NemLogIn\config\applicationhost.config"
+   "%programfiles%\IIS Express\appcmd.exe" set site "Bugfree.NemLogIn.IdP" /+bindings.[protocol='https',bindingInformation='*:20001:'] /apphostconfig:"%USERPROFILE%\source\repos\Bugfree.NemLogIn\src\.vs\Bugfree.NemLogIn\config\applicationhost.config"
 
-   "%programfiles%\IIS Express\appcmd.exe" set site "Bugfree.NemLogIn.Web" /+bindings.[protocol='https',bindingInformation='*:20002:'] /apphostconfig:"%USERPROFILE%\source\repos\Bugfree.NemLogIn\.vs\Bugfree.NemLogIn\config\applicationhost.config"
+   "%programfiles%\IIS Express\appcmd.exe" set site "Bugfree.NemLogIn.Web" /+bindings.[protocol='https',bindingInformation='*:20002:'] /apphostconfig:"%USERPROFILE%\source\repos\Bugfree.NemLogIn\src\.vs\Bugfree.NemLogIn\config\applicationhost.config"
    ```
 
    If ```appcmd``` fails with a message stating that the binding already exists,
